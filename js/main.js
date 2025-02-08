@@ -78,18 +78,26 @@
     // Modal Video
     $(document).ready(function () {
         var $videoSrc;
+    
+        // Tangkap URL video dari tombol yang diklik
         $('.btn-play').click(function () {
             $videoSrc = $(this).data("src");
         });
-        console.log($videoSrc);
-
-        $('#videoModal').on('shown.bs.modal', function (e) {
-            $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
-        })
-
-        $('#videoModal').on('hide.bs.modal', function (e) {
-            $("#video").attr('src', $videoSrc);
-        })
+    
+        // Saat modal ditampilkan, setel src pada video
+        $('#videoModal').on('show.bs.modal', function () {
+            if ($videoSrc) {
+                $("#video source").attr('src', $videoSrc);
+                $("#video")[0].load(); // Load ulang video agar source baru diterapkan
+                $("#video")[0].play(); // Auto-play saat modal terbuka
+            }
+        });
+    
+        // Saat modal ditutup, hentikan video
+        $('#videoModal').on('hidden.bs.modal', function () {
+            $("#video")[0].pause();
+            $("#video source").attr('src', '');
+        });
     });
 
 
